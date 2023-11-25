@@ -1,12 +1,19 @@
-const http = require('http');
-const PORT = 3000;
+const NodeMediaServer = require("node-media-server");
+const HTTP_PORT = process.env.PORT || 8000;
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World!');
-});
+const config = {
+  rtmp: {
+    port: 1935,
+    chunk_size: 60000,
+    gop_cache: true,
+    ping: 30,
+    ping_timeout: 60,
+  },
+  http: {
+    port: HTTP_PORT,
+    allow_origin: "*",
+  },
+};
 
-server.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}/`);
-});
+var nms = new NodeMediaServer(config);
+nms.run();
